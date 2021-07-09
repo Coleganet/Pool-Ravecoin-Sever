@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo ""
-echo "Ravencoin Pool Start Watching Logs..."
+echo "Ravencoin Server Start Watching Logs..."
 echo ""
 
 source ~/.bashrc
@@ -20,7 +20,7 @@ echo ""
 if [ "${1}" != "" ]; then
   watch -n1 -- "sudo tail -n1000 ~/.pm2/logs/pool-out.log | grep -i -a \"${1}\"" ;
 else
-  ~/.nvm/versions/node/v8.17.0/bin/pm2 logs pool ;
+  ~/.nvm/versions/node/v12.13.0/bin/pm2 logs pool ;
 fi
 
 echo ""
