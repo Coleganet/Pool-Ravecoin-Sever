@@ -6,12 +6,13 @@ echo "Please do NOT run as root, run as the pool user!"
 
 echo "Installing... Please wait!"
 
-sleep 5
+sleep 3
 
 sudo rm -rf /usr/lib/node_modules
 sudo rm -rf node_modules
 sudo apt remove --purge -y nodejs node
 sudo rm /etc/apt/sources.list.d/*
+
 sudo apt update
 sudo apt upgrade -y
 
@@ -42,8 +43,8 @@ sudo chown -R $USER:$GROUP ~/.nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-nvm install v12.13.0
-nvm use v12.13.0
+nvm install v8.17.0
+nvm use v8.17.0
 
 git clone https://github.com/cyberpoolorg/cyberpool-ravencoin-server
 chmod -R +x cyberpool-ravencoin-server/
