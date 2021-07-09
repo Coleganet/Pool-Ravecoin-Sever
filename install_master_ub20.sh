@@ -54,7 +54,7 @@ npm update -g
 npm install -g pm2@4.5.6
 npm install -g npm@latest-6
 
-npm install
+npm install --loglevel=error
 npm update
 npm audit fix
 npm install sha3
