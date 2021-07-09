@@ -36,14 +36,14 @@ sudo systemctl start ntp
 
 sudo rm -rf ~/.nvm
 sudo rm -rf ~/.npm
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 source ~/.bashrc
 sudo chown -R $USER:$GROUP ~/.nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-nvm install v8.17.0
-nvm use v8.17.0
+nvm install v12.13.0
+nvm use v12.13.0
 
 git clone https://github.com/cyberpoolorg/cyberpool-ravencoin-server
 chmod -R +x cyberpool-ravencoin-server/
