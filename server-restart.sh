@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo ""
-echo "Ravencoin Pool Restarting..."
+echo "Ravencoin Server Restarting..."
 echo ""
 
 source ~/.bashrc
@@ -17,13 +17,13 @@ echo "Current working dir : $PWD"
 echo "Script location path (dir) : $BASEDIR"
 echo ""
 
-~/.nvm/versions/node/v8.17.0/bin/pm2 restart pool
+~/.nvm/versions/node/v12.13.0/bin/pm2 restart pool
 
 renice -n -18 -p $(pidof node)
 renice -n -18 -p $(pidof nodejs)
 
 echo ""
-echo "Ravencoin Pool Restarted!"
+echo "Ravencoin Server Restarted!"
 echo ""
 
 exit 0
