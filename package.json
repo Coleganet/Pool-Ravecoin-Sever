@@ -87,6 +87,6 @@
 	"stratum-pool": "git+https://github.com/cyberpoolorg/cyberpool-ravencoin-stratum.git"
     },
     "engines": {
-        "node": ">=12.13.0"
+        "node": ">=8.17.0"
     }
 }
