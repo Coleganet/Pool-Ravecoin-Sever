@@ -1,0 +1,59 @@
+{
+    "devmode": false,
+    "devmodePayMinimim": 0.25,
+    "devmodePayInterval": 120,
+    "logips": true,
+    "anonymizeips": true,
+    "ipv4bits": 16,
+    "ipv6bits": 16,
+    "defaultCoin": "ravencoin",
+    "logger" : {
+        "level" : "debug",
+        "file" : "/home/pool/cyberpool-ravencoin-server/logs/ravencoin_debug.log"
+    },
+    "cliHost": "127.0.0.1",
+    "cliPort": 17117,
+    "clustering": {
+        "enabled": false,
+        "forks": "auto"
+    },
+    "defaultPoolConfigs": {
+        "blockRefreshInterval": 400,
+        "jobRebroadcastTimeout": 25,
+        "connectionTimeout": 600,
+        "emitInvalidBlockHashes": false,
+        "validateWorkerUsername": true,
+        "tcpProxyProtocol": false,
+        "banning": {
+            "enabled": true,
+            "time": 600,
+            "invalidPercent": 50,
+            "checkThreshold": 500,
+            "purgeInterval": 300
+        },
+        "redis": {
+            "host": "127.0.0.1",
+            "port": 6379
+        }
+    },
+    "website": {
+        "enabled": true,
+        "sslenabled": false,
+        "sslforced": false,
+        "host": "0.0.0.0",
+        "port": 3001,
+        "sslport": 443,
+        "sslkey": "/home/pool/cyberpool-ravencoin-server/certs/privkey.pem",
+        "sslcert": "/home/pool/cyberpool-ravencoin-server/certs/fullchain.pem",
+        "stratumHost": "raven.cyberpool.org",
+        "stats": {
+            "updateInterval": 900,
+            "historicalRetention": 43200,
+            "hashrateWindow": 900
+        }
+    },
+    "redis": {
+        "host": "127.0.0.1",
+        "port": 6379
+    }
+}
