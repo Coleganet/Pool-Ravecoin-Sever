@@ -68,7 +68,6 @@
         "mysql": "^2.16.0",
         "newrelic": "^5.1.0",
         "node-json-minify": "^1.0.0",
-	"multi-hashing": "^1.0.0",
         "node-watch": "^0.5.9",
         "nonce": "^1.0.4",
         "posix": "^4.2.0",
@@ -84,6 +83,7 @@
         "winston": "^3.2.1",
         "winston-daily-rotate-file": "^3.5.1",
         "winston-transport": "^4.3.0",
+	"stratum-pool": "git+https://github.com/cyberpoolorg/cyberpool-ravencoin-hashing.git",
 	"stratum-pool": "git+https://github.com/cyberpoolorg/cyberpool-ravencoin-stratum.git"
     },
     "engines": {
