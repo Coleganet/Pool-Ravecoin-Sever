@@ -43,19 +43,16 @@ sudo chown -R $USER:$GROUP ~/.nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-nvm install v8.17.0
-nvm use v8.17.0
+nvm install v12.13.0
+nvm use v12.13.0
 
 git clone https://github.com/cyberpoolorg/cyberpool-ravencoin-server
 chmod -R +x cyberpool-ravencoin-server/
 cd cyberpool-ravencoin-server
 
 npm update -g
-
 npm install -g pm2@4.5.6
-npm install -g npm@latest-6
-
-npm install -s
+npm install
 npm update
 npm audit fix
 npm install sha3
