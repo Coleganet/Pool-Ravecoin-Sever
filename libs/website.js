@@ -47,36 +47,34 @@ module.exports = function () {
     portalStats.getGlobalStats(function () {
     });
     var buildUpdatedWebsite = function () {
-		portalStats.getGlobalStats(function () {
-			processTemplates();
-			var statData = 'data: ' + JSON.stringify(portalStats.stats) + '\n\n';
-			for (var uid in portalApi.liveStatConnections) {
-				var res = portalApi.liveStatConnections[uid];
-				res.write(statData);
-			}
-		});
-	};
-	setInterval(buildUpdatedWebsite, websiteConfig.stats.updateInterval * 1000);
+        portalStats.getGlobalStats(function () {
+	    var statData = 'data: ' + JSON.stringify(portalStats.stats) + '\n\n';
+	    for (var uid in portalApi.liveStatConnections) {
+		var res = portalApi.liveStatConnections[uid];
+		res.write(statData);
+	    }
+	});
+    };
+    setInterval(buildUpdatedWebsite, websiteConfig.stats.updateInterval * 1000);
 
     var app = express();
     app.use(cors());
     app.get('/api/:method', function (req, res, next) {
-		portalApi.handleApiRequest(req, res, next);
-	});
+	portalApi.handleApiRequest(req, res, next);
+    });
     app.use(compress());
-    app.use(function(err, req, res, next){
+    app.use(function(err, req, res, next) {
         console.error(err.stack);
         res.send(500, 'Something broke!');
     });
 
     try {
         logger.info('WEBSITE> Attempting to start Website on %s:%s', portalConfig.website.host,portalConfig.website.port);
-		http.createServer(app).listen(portalConfig.website.port, portalConfig.website.host, function () {
-			logger.info('WEBSITE> Website started on %s:%s', portalConfig.website.host,portalConfig.website.port);
-		});
+	http.createServer(app).listen(portalConfig.website.port, portalConfig.website.host, function () {
+	    logger.info('WEBSITE> Website started on %s:%s', portalConfig.website.host,portalConfig.website.port);
+	});
 	} catch (e) {
-		logger.error('WEBSITE> e = %s', JSON.stringify(e));
-		logger.error('WEBSITE> Could not start website on %s:%s - its either in use or you do not have permission', portalConfig.website.host,portalConfig.website.port);
+	     logger.error('WEBSITE> e = %s', JSON.stringify(e));
+	    logger.error('WEBSITE> Could not start website on %s:%s - its either in use or you do not have permission', portalConfig.website.host,portalConfig.website.port);
 	}
-
 };
