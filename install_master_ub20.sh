@@ -56,10 +56,11 @@ npm install -g pm2@4.5.6
 npm install
 npm update
 npm audit fix
+sleep 2
 npm install sha3
+sleep 2
 npm install logger
+sleep 2
 npm install bignum
 
 echo "Installation completed!"
-
-exit 0
