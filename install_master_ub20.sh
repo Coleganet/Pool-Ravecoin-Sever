@@ -58,10 +58,11 @@ npm install
 npm update
 npm audit fix
 sleep 2
+cd cyberpool-ravencoin-server
 npm install sha3
 sleep 2
+cd cyberpool-ravencoin-server
 npm install logger
 sleep 2
+cd cyberpool-ravencoin-server
 npm install bignum
-
-echo "Installation completed!"
