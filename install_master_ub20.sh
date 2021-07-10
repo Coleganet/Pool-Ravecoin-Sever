@@ -46,6 +46,7 @@ export NVM_DIR="$HOME/.nvm"
 nvm install v12.13.0
 nvm use v12.13.0
 
+git config --global http.https://gopkg.in.followRedirects true
 git clone https://github.com/cyberpoolorg/cyberpool-ravencoin-server
 chmod -R +x cyberpool-ravencoin-server/
 cd cyberpool-ravencoin-server
