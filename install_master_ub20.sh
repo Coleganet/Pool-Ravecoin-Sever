@@ -10,7 +10,7 @@ sleep 3
 
 sudo rm -rf /usr/lib/node_modules
 sudo rm -rf node_modules
-sudo apt remove --purge -y nodejs node
+sudo apt remove --purge -y nodejs
 sudo rm /etc/apt/sources.list.d/*
 
 sudo apt update
