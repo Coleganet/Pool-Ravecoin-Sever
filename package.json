@@ -31,7 +31,7 @@
         "require-so-slow": "^2.0.5"
     },
     "dependencies": {
-        "3.npm": "^2.1.0",
+        "3.npm": "^1.0.0",
         "asn1": "^0.2.4",
         "async": "^3.2.0",
         "bcrypt-pbkdf": "^1.0.2",
