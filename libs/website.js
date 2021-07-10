@@ -45,8 +45,7 @@ module.exports = function () {
 	var logSystem = 'Website';
     
     portalStats.getGlobalStats(function () {
-		readPageFiles(Object.keys(pageFiles));
-	});
+    });
     var buildUpdatedWebsite = function () {
 		portalStats.getGlobalStats(function () {
 			processTemplates();
