@@ -21,6 +21,7 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const loggerFactory = require('./logger.js');
+const logger = loggerFactory.getLogger('Website', 'system');
 
 var path = require('path');
 var async = require('async');
@@ -37,53 +38,46 @@ var api = require('./api.js');
 
 module.exports = function () {
     var portalConfig = JSON.parse(process.env.portalConfig);
-    var poolConfigs = JSON.parse(process.env.pools);
-    var websiteConfig = portalConfig.website;
-    var portalApi = new api(logger, portalConfig, poolConfigs);
-    var portalStats = portalApi.stats;
-    var logSystem = 'API';
+	var poolConfigs = JSON.parse(process.env.pools);
+	var websiteConfig = portalConfig.website;
+	var portalApi = new api(portalConfig, poolConfigs);
+	var portalStats = portalApi.stats;
+	var logSystem = 'Website';
     
-    portalStats.getGlobalStats(function(){
-
-    });
-
-    var buildUpdatedWebsite = function(){
-        portalStats.getGlobalStats(function(){
-
-            var statData = 'data: ' + JSON.stringify(portalStats.stats) + '\n\n';
-            for (var uid in portalApi.liveStatConnections){
-                var res = portalApi.liveStatConnections[uid];
-                res.write(statData);
-            }
-
-        });
-    };
-
-    setInterval(buildUpdatedWebsite, websiteConfig.stats.updateInterval * 1000);
+    portalStats.getGlobalStats(function () {
+		readPageFiles(Object.keys(pageFiles));
+	});
+    var buildUpdatedWebsite = function () {
+		portalStats.getGlobalStats(function () {
+			processTemplates();
+			var statData = 'data: ' + JSON.stringify(portalStats.stats) + '\n\n';
+			for (var uid in portalApi.liveStatConnections) {
+				var res = portalApi.liveStatConnections[uid];
+				res.write(statData);
+			}
+		});
+	};
+	setInterval(buildUpdatedWebsite, websiteConfig.stats.updateInterval * 1000);
 
     var app = express();
-
     app.use(cors());
-
-    app.get('/api/:method', function(req, res, next){
-        portalApi.handleApiRequest(req, res, next);
-    });
-    
+    app.get('/api/:method', function (req, res, next) {
+		portalApi.handleApiRequest(req, res, next);
+	});
     app.use(compress());
-
     app.use(function(err, req, res, next){
         console.error(err.stack);
         res.send(500, 'Something broke!');
     });
 
     try {
-        app.listen(portalConfig.website.port, portalConfig.website.host, function () {
-            logger.debug(logSystem, 'Server', 'Api started on ' + portalConfig.website.host + ':' + portalConfig.website.port);
-        });
-    }
-    catch(e){
-        logger.error(logSystem, 'Server', 'Could not start api on ' + portalConfig.website.host + ':' + portalConfig.website.port
-            +  ' - its either in use or you do not have permission');
-    }
+        logger.info('WEBSITE> Attempting to start Website on %s:%s', portalConfig.website.host,portalConfig.website.port);
+		http.createServer(app).listen(portalConfig.website.port, portalConfig.website.host, function () {
+			logger.info('WEBSITE> Website started on %s:%s', portalConfig.website.host,portalConfig.website.port);
+		});
+	} catch (e) {
+		logger.error('WEBSITE> e = %s', JSON.stringify(e));
+		logger.error('WEBSITE> Could not start website on %s:%s - its either in use or you do not have permission', portalConfig.website.host,portalConfig.website.port);
+	}
 
 };
