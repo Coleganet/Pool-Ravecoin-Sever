@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo ""
-echo "Ravencoin Pool Stoping..."
+echo "Ravencoin Server Stoping..."
 echo ""
 
 source ~/.bashrc
@@ -17,10 +17,10 @@ echo "Current working dir : $PWD"
 echo "Script location path (dir) : $BASEDIR"
 echo ""
 
-~/.nvm/versions/node/v8.17.0/bin/pm2 stop pool
+~/.nvm/versions/node/v12.13.0/bin/pm2 stop pool
 
 echo ""
-echo "Ravencoin Pool Stopped!"
+echo "Ravencoin Server Stopped!"
 echo ""
 
 exit 0
