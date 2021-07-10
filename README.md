@@ -6,12 +6,11 @@ Cyber Pool Ravencoin Server - v1.0.0 Special Edition
 Highly Efficient Stratum Server for Ravencoin!
 
 -------
-### Cyber Pool Ravencoin consists of 3 main modules:
+### Cyber Pool Ravencoin consists of 2 main modules:
 | Project | Link |
 | ------------- | ------------- |
 | [Cyberpool Ravencoin Server](https://github.com/cyberpoolorg/cyberpool-ravencoin-server) | https://github.com/cyberpoolorg/cyberpool-ravencoin-server |
 | [Cyberpool Ravencoin Stratum](https://github.com/cyberpoolorg/cyberpool-ravencoin-stratum) | https://github.com/cyberpoolorg/cyberpool-ravencoin-stratum |
-| [Cyberpool Ravencoin Hashing](https://github.com/cyberpoolorg/cyberpool-ravencoin-hashing) | https://github.com/cyberpoolorg/cyberpool-ravencoin-hashing |
 
 -------
 ### Requirements
