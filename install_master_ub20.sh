@@ -48,6 +48,7 @@ nvm use v12.13.0
 
 npm update -g
 npm install -g pm2@4.5.6
+npm install -g npm@latest-6
 
 git config --global http.https://gopkg.in.followRedirects true
 git clone https://github.com/cyberpoolorg/cyberpool-ravencoin-server
@@ -55,14 +56,25 @@ chmod -R +x cyberpool-ravencoin-server/
 cd cyberpool-ravencoin-server
 
 npm install
+sleep 2
+cd
+cd cyberpool-ravencoin-server
 npm update
+sleep 2
+cd
+cd cyberpool-ravencoin-server
 npm audit fix
 sleep 2
+cd
 cd cyberpool-ravencoin-server
 npm install sha3
 sleep 2
+cd
 cd cyberpool-ravencoin-server
 npm install logger
 sleep 2
+cd
 cd cyberpool-ravencoin-server
 npm install bignum
+cd
+cd cyberpool-ravencoin-server
