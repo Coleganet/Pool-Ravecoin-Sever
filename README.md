@@ -18,7 +18,7 @@ Highly Efficient Stratum Server for Ravencoin!
 * Ubuntu Server 20.04.* LTS
 * Coin daemon
 * Node Version Manager
-* Node 8.1.7
+* Node 12.13.0
 * Process Manager 2 / pm2
 * Redis Server
 * ntp
@@ -74,6 +74,10 @@ Other helpfull commands.
     git clone https://github.com/cyberpoolorg/cyberpool-ravencoin-server.git
     cd cyberpool-ravencoin-server/
     ./install_master_ub20.sh
+    
+    or
+    
+    curl -L https://raw.githubusercontent.com/cyberpoolorg/cyberpool-ravencoin-server/master/install_master_ub20.sh | bash
 
 -------
 ### Configure Server
