@@ -79,14 +79,14 @@
         "semver": "^5.7.1",
         "sha3": "^2.1.4",
         "sma": "^0.1.1",
+	"stratum-pool": "git+https://github.com/cyberpoolorg/cyberpool-ravencoin-stratum.git",
         "sshpk": "^1.15.2",
         "underscore": "^1.12.1",
         "winston": "^3.2.1",
         "winston-daily-rotate-file": "^3.5.1",
-        "winston-transport": "^4.3.0",
-	"stratum-pool": "git+https://github.com/cyberpoolorg/cyberpool-ravencoin-stratum.git"
+        "winston-transport": "^4.3.0"
     },
     "engines": {
-        "node": ">=8.17.0"
+        "node": ">=12.13.0"
     }
 }
