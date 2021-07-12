@@ -23,7 +23,7 @@ curl -fsSL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 
 sudo apt update
 sudo apt install -y libdb-dev libdb++-dev libssl-dev libboost-all-dev libminiupnpc-dev libtool autotools-dev
-sudo apt install -y sudo git npm nodejs nginx python3-certbot-nginx redis-server
+sudo apt install -y sudo git nodejs nginx python3-certbot-nginx redis-server
 
 sleep 3
 
