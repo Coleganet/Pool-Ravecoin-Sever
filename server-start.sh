@@ -21,8 +21,8 @@ echo ""
 
 ~/.nvm/versions/node/v12.22.2/bin/pm2 start --name pool node -- --optimize_for_size --max-old-space-size=4096 "${BASEDIR}/init.js"
 
-renice -n -18 -p $(pidof node)
-renice -n -18 -p $(pidof nodejs)
+sudo renice -n -18 -p $(pidof node)
+sudo renice -n -18 -p $(pidof nodejs)
 
 echo ""
 echo "Ravencoin Server Started!"
