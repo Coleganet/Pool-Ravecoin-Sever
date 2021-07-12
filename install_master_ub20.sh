@@ -63,3 +63,8 @@ npm install sha3
 npm install logger
 npm install bignum
 
+echo ""
+echo "Ravencoin Server Installed!"
+echo ""
+
+exit 0
