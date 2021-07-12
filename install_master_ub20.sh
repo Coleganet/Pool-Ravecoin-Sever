@@ -19,6 +19,7 @@ sudo apt upgrade -y
 sudo apt install -y apt-transport-https software-properties-common build-essential autoconf pkg-config make gcc g++ screen wget curl ntp fail2ban 
 
 sudo add-apt-repository -y ppa:chris-lea/redis-server
+curl -fsSL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 
 sudo apt update
 sudo apt install -y libdb-dev libdb++-dev libssl-dev libboost-all-dev libminiupnpc-dev libtool autotools-dev
@@ -43,11 +44,11 @@ sudo chown -R $USER:$GROUP ~/.nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-nvm install v12.13.0
-nvm use v12.13.0
+nvm install v12.22.3
+nvm use v12.22.3
 
 npm update -g
-npm install -g pm2@4.5.6
+npm install -g pm2@5.1.0
 npm install -g npm@latest-6
 
 git config --global http.https://gopkg.in.followRedirects true
@@ -56,25 +57,9 @@ chmod -R +x cyberpool-ravencoin-server/
 cd cyberpool-ravencoin-server
 
 npm install
-sleep 2
-cd
-cd cyberpool-ravencoin-server
 npm update
-sleep 2
-cd
-cd cyberpool-ravencoin-server
 npm audit fix
-sleep 2
-cd
-cd cyberpool-ravencoin-server
 npm install sha3
-sleep 2
-cd
-cd cyberpool-ravencoin-server
 npm install logger
-sleep 2
-cd
-cd cyberpool-ravencoin-server
 npm install bignum
-cd
-cd cyberpool-ravencoin-server
+
