@@ -312,6 +312,7 @@ module.exports = function(portalConfig, poolConfigs) {
 							hashrates: replies[i + 1],
 							rewardRecipients: poolConfigs[coinName].rewardRecipients,
 							poolStats: {
+								poolStartTime: replies[i + 2] ? (replies[i + 2].poolStartTime || 0) : 0,
 								validShares: replies[i + 2] ? (replies[i + 2].validShares || 0) : 0,
 								invalidShares: replies[i + 2] ? (replies[i + 2].invalidShares || 0) : 0,
 								validBlocks: replies[i + 2] ? (replies[i + 2].validBlocks || 0) : 0,
