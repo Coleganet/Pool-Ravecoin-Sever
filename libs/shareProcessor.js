@@ -73,31 +73,49 @@ module.exports = function(poolConfig) {
 	});
 	this.handleShare = function(isValidShare, isValidBlock, shareData) {
 		var redisCommands = [];
-		if (isValidShare) {
-			redisCommands.push(['hincrbyfloat', coin + ':shares:roundCurrent', shareData.worker, shareData.difficulty]);
-			redisCommands.push(['hincrby', coin + ':stats', 'validShares', 1]);
-		} else {
-			redisCommands.push(['hincrby', coin + ':stats', 'invalidShares', 1]);
-		}
-		var dateNow = Date.now();
-		var hashrateData = [isValidShare ? shareData.difficulty : -shareData.difficulty, shareData.worker, dateNow];
-		redisCommands.push(['zadd', coin + ':hashrate', dateNow / 1000 | 0, hashrateData.join(':')]);
-		if (isValidBlock) {
-			redisCommands.push(['rename', coin + ':shares:roundCurrent', coin + ':shares:round' + shareData.height]);
-			redisCommands.push(['rename', coin + ':shares:timesCurrent', coin + ':shares:times' + shareData.height]);
-			redisCommands.push(['sadd', coin + ':blocksPending', [shareData.blockHash, shareData.txHash, shareData.height].join(':')]);
-			redisCommands.push(['sadd', coin + ':blocksExplorer', [dateNow, shareData.height, shareData.blockHash, shareData.worker].join(':')]);
-			redisCommands.push(['zadd', coin + ':lastBlock', dateNow / 1000 | 0, [shareData.blockHash, shareData.txHash, shareData.worker, shareData.height, dateNow].join(':')]);
-			redisCommands.push(['zadd', coin + ':lastBlockTime', dateNow / 1000 | 0, [dateNow].join(':')]);
-			redisCommands.push(['hincrby', coin + ':stats', 'validBlocks', 1]);
-			redisCommands.push(['hincrby', coin + ':blocksFound', shareData.worker, 1]);
-		}
-		else if (shareData.blockHash) {            
-			redisCommands.push(['hincrby', coin + ':stats', 'invalidBlocks', 1]);           
-		}
-		connection.multi(redisCommands).exec(function(err, replies) {
-			if (err)
-			logger.error(logSystem, logComponent, logSubCat, 'Error with share processor multi ' + JSON.stringify(err));
+		var shareLookups = [
+			['hgetall', coin + ':shares:roundCurrent'],
+		];
+		connection.multi(shareLookups).exec(function(err, replies) {
+			var currentShares = (replies[0] || {});
+			function sum(obj) {
+				var sum = 0;
+				for( var el in obj ) {
+					if(obj.hasOwnProperty( el )) {
+						sum += parseFloat(obj[el]);
+					}
+				}
+				return sum;
+			}
+			var summed = sum(currentShares);
+			shareData.blockEffort = summed.toFixed(4);
+
+			if (isValidShare) {
+				redisCommands.push(['hincrbyfloat', coin + ':shares:roundCurrent', shareData.worker, shareData.difficulty]);
+				redisCommands.push(['hincrby', coin + ':stats', 'validShares', 1]);
+			} else {
+				redisCommands.push(['hincrby', coin + ':stats', 'invalidShares', 1]);
+			}
+			var dateNow = Date.now();
+			var hashrateData = [isValidShare ? shareData.difficulty : -shareData.difficulty, shareData.worker, dateNow];
+			redisCommands.push(['zadd', coin + ':hashrate', dateNow / 1000 | 0, hashrateData.join(':')]);
+			if (isValidBlock) {
+				redisCommands.push(['rename', coin + ':shares:roundCurrent', coin + ':shares:round' + shareData.height]);
+				redisCommands.push(['rename', coin + ':shares:timesCurrent', coin + ':shares:times' + shareData.height]);
+				redisCommands.push(['sadd', coin + ':blocksPending', [shareData.blockHash, shareData.txHash, shareData.height].join(':')]);
+				redisCommands.push(['sadd', coin + ':blocksExplorer', [dateNow, shareData.height, shareData.blockReward, shareData.blockHash, shareData.worker, shareData.blockEffort].join(':')]);
+				redisCommands.push(['zadd', coin + ':lastBlock', dateNow / 1000 | 0, [shareData.blockHash, shareData.txHash, shareData.worker, shareData.height, dateNow].join(':')]);
+				redisCommands.push(['zadd', coin + ':lastBlockTime', dateNow / 1000 | 0, [dateNow].join(':')]);
+				redisCommands.push(['hincrby', coin + ':stats', 'validBlocks', 1]);
+				redisCommands.push(['hincrby', coin + ':blocksFound', shareData.worker, 1]);
+			}
+			else if (shareData.blockHash) {            
+				redisCommands.push(['hincrby', coin + ':stats', 'invalidBlocks', 1]);           
+			}
+			connection.multi(redisCommands).exec(function(err, replies) {
+				if (err)
+				logger.error(logSystem, logComponent, logSubCat, 'Error with share processor multi ' + JSON.stringify(err));
+			});
 		});
 	};
 };
