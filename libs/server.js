@@ -21,7 +21,7 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const loggerFactory = require('./logger.js');
-const logger = loggerFactory.getLogger('Website', 'system');
+const logger = loggerFactory.getLogger('Server', 'system');
 
 var path = require('path');
 var async = require('async');
@@ -42,7 +42,7 @@ module.exports = function () {
 	var websiteConfig = portalConfig.website;
 	var portalApi = new api(portalConfig, poolConfigs);
 	var portalStats = portalApi.stats;
-	var logSystem = 'Website';
+	var logSystem = 'Server';
     
     portalStats.getGlobalStats(function () {
     });
@@ -69,12 +69,12 @@ module.exports = function () {
     });
 
     try {
-        logger.info('WEBSITE> Attempting to start Website on %s:%s', portalConfig.website.host,portalConfig.website.port);
+        logger.info('SERVER> Attempting to start Server on %s:%s', portalConfig.website.host,portalConfig.website.port);
 	http.createServer(app).listen(portalConfig.website.port, portalConfig.website.host, function () {
-	    logger.info('WEBSITE> Website started on %s:%s', portalConfig.website.host,portalConfig.website.port);
+	    logger.info('SERVER> Server started on %s:%s', portalConfig.website.host,portalConfig.website.port);
 	});
 	} catch (e) {
-	     logger.error('WEBSITE> e = %s', JSON.stringify(e));
-	    logger.error('WEBSITE> Could not start website on %s:%s - its either in use or you do not have permission', portalConfig.website.host,portalConfig.website.port);
+	     logger.error('SERVER> e = %s', JSON.stringify(e));
+	    logger.error('SERVER> Could not start server on %s:%s - its either in use or you do not have permission', portalConfig.website.host,portalConfig.website.port);
 	}
 };
