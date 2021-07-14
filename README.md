@@ -73,11 +73,11 @@ Other helpfull commands.
     git config --global http.https://gopkg.in.followRedirects true
     git clone https://github.com/cyberpoolorg/cyberpool-ravencoin-server.git
     cd cyberpool-ravencoin-server/
-    ./install_master_ub20.sh
+    ./install.sh
     
     or
     
-    curl -L https://raw.githubusercontent.com/cyberpoolorg/cyberpool-ravencoin-server/master/install_master_ub20.sh | bash
+    curl -L https://raw.githubusercontent.com/cyberpoolorg/cyberpool-ravencoin-server/master/install.sh | bash
 
 -------
 ### Configure Server
