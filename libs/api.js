@@ -41,12 +41,28 @@ module.exports = function(portalConfig, poolConfigs) {
 			});
 			break;
 			case 'payments':
-			var poolBlocks = [];
+			var poolPayments = [];
 			for(var pool in portalStats.stats.pools) {
-				poolBlocks.push({name: pool, pending: portalStats.stats.pools[pool].pending, payments: portalStats.stats.pools[pool].payments});
+				poolPayments.push({name: pool, payments: portalStats.stats.pools[pool].payments});
 			}
 			res.header('Content-Type', 'application/json');
-			res.end(JSON.stringify(poolBlocks));
+			res.end(JSON.stringify(poolPayments));
+			return;
+			case 'blockspending':
+			var pendBlocks = [];
+			for(var pool in portalStats.stats.pools) {
+				pendBlocks.push({name: pool, pendingBlocks: portalStats.stats.pools[pool].pending});
+			}
+			res.header('Content-Type', 'application/json');
+			res.end(JSON.stringify(pendBlocks));
+			return;
+			case 'blocksfound':
+			var listBlocks = [];
+			for(var pool in portalStats.stats.pools) {
+				listBlocks.push({name: pool, foundBlocks: portalStats.stats.pools[pool].blockexp});
+			}
+			res.header('Content-Type', 'application/json');
+			res.end(JSON.stringify(listBlocks));
 			return;
 			case 'worker_stats':
 			res.header('Content-Type', 'application/json');
