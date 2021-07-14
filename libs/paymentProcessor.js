@@ -641,7 +641,6 @@ function SetupForPool(poolOptions, setupFinished) {
 					var paymentsData = {
 						time: Date.now(),
 						txid: txid,
-						txidd: txid,
 						shares: totalShares,
 						paid: totalSent,
 						miners: Object.keys(addressAmounts).length,
