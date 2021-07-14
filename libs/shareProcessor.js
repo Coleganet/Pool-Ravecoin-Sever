@@ -100,10 +100,20 @@ module.exports = function(poolConfig) {
 			var hashrateData = [isValidShare ? shareData.difficulty : -shareData.difficulty, shareData.worker, dateNow];
 			redisCommands.push(['zadd', coin + ':hashrate', dateNow / 1000 | 0, hashrateData.join(':')]);
 			if (isValidBlock) {
+				var blockExplorer = [];
+				var blocksData = {
+					time: dateNow,
+					height: shareData.height,
+					reward: shareData.blockReward,
+					hash: shareData.blockHash,
+					difficulty: shareData.blockDiff,
+					finder: shareData.worker,
+					effort: shareData.blockEffort
+				};
+				blockExplorer.push(['zadd', coin + ':blockExplorer', dateNow / 1000, JSON.stringify(blocksData)]);
 				redisCommands.push(['rename', coin + ':shares:roundCurrent', coin + ':shares:round' + shareData.height]);
 				redisCommands.push(['rename', coin + ':shares:timesCurrent', coin + ':shares:times' + shareData.height]);
 				redisCommands.push(['sadd', coin + ':blocksPending', [shareData.blockHash, shareData.txHash, shareData.height].join(':')]);
-				redisCommands.push(['sadd', coin + ':blocksExplorer', [dateNow, shareData.height, shareData.blockReward, shareData.blockHash, shareData.worker, shareData.blockEffort].join(':')]);
 				redisCommands.push(['zadd', coin + ':lastBlock', dateNow / 1000 | 0, [shareData.blockHash, shareData.txHash, shareData.worker, shareData.height, dateNow].join(':')]);
 				redisCommands.push(['zadd', coin + ':lastBlockTime', dateNow / 1000 | 0, [dateNow].join(':')]);
 				redisCommands.push(['hincrby', coin + ':stats', 'validBlocks', 1]);
@@ -112,6 +122,10 @@ module.exports = function(poolConfig) {
 			else if (shareData.blockHash) {            
 				redisCommands.push(['hincrby', coin + ':stats', 'invalidBlocks', 1]);           
 			}
+			connection.multi(blockExplorer).exec(function(err, replies) {
+				if (err)
+				logger.error(logSystem, logComponent, logSubCat, 'Error with share processor multi ' + JSON.stringify(err));
+			});
 			connection.multi(redisCommands).exec(function(err, replies) {
 				if (err)
 				logger.error(logSystem, logComponent, logSubCat, 'Error with share processor multi ' + JSON.stringify(err));
