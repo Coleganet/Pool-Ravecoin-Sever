@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # This is the Pool install script.
-echo "Cyberpool Ravencoin Pool install script."
+echo "Cyberpool Ravencoin Server install script."
 echo "Please do NOT run as root, run as the pool user!"
 
 echo "Installing... Please wait!"
