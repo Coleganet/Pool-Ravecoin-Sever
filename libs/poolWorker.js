@@ -21,7 +21,6 @@ var Stratum = require('stratum-pool');
 var redis = require('redis');
 var net = require('net');
 const functions = require('./functions.js');
-var MposCompatibility = require('./mposCompatibility.js');
 var ShareProcessor = require('./shareProcessor.js');
 const loggerFactory = require('./logger.js');
 module.exports = function() {
@@ -67,40 +66,20 @@ module.exports = function() {
 			share: function() {},
 			diff: function() {}
 		};
-		if (poolOptions.mposMode && poolOptions.mposMode.enabled) {
-			var mposCompat = new MposCompatibility(poolOptions);
-			handlers.auth = function(port, workerName, password, authCallback) {
-				mposCompat.handleAuth(workerName, password, authCallback);
-			};
-			handlers.share = function(isValidShare, isValidBlock, data) {
-				mposCompat.handleShare(isValidShare, isValidBlock, data);
-			};
-			handlers.diff = function(workerName, diff) {
-				mposCompat.handleDifficultyUpdate(workerName, diff);
-			}
-		} else {
-			var shareProcessor = new ShareProcessor(poolOptions);
-			handlers.auth = function(port, workerName, password, authCallback) {
-				if (!poolOptions.validateWorkerUsername) {
-					authCallback(true);
-				} else {
-					try {
-						let re = /^(?:[a-zA-Z0-9]+\.)*[a-zA-Z0-9]+$/;
-						if (re.test(workerName)) {
-							if (workerName.indexOf('.') !== -1) {
-								let tmp = workerName.split('.');
-								if (tmp.length !== 2) {
-									authCallback(false);
-								} else {
-									pool.daemon.cmd('validateaddress', [tmp[0]], function(results) {
-										var isValid = results.filter(function(r) {
-											return r.response.isvalid
-										}).length > 0;
-										authCallback(isValid);
-									});
-								}
+		var shareProcessor = new ShareProcessor(poolOptions);
+		handlers.auth = function(port, workerName, password, authCallback) {
+			if (!poolOptions.validateWorkerUsername) {
+				authCallback(true);
+			} else {
+				try {
+					let re = /^(?:[a-zA-Z0-9]+\.)*[a-zA-Z0-9]+$/;
+					if (re.test(workerName)) {
+						if (workerName.indexOf('.') !== -1) {
+							let tmp = workerName.split('.');
+							if (tmp.length !== 2) {
+								authCallback(false);
 							} else {
-								pool.daemon.cmd('validateaddress', [workerName], function(results) {
+								pool.daemon.cmd('validateaddress', [tmp[0]], function(results) {
 									var isValid = results.filter(function(r) {
 										return r.response.isvalid
 									}).length > 0;
@@ -108,18 +87,25 @@ module.exports = function() {
 								});
 							}
 						} else {
-							authCallback(false);
+							pool.daemon.cmd('validateaddress', [workerName], function(results) {
+								var isValid = results.filter(function(r) {
+									return r.response.isvalid
+								}).length > 0;
+								authCallback(isValid);
+							});
 						}
-					} catch (e) {
+					} else {
 						authCallback(false);
 					}
+				} catch (e) {
+					authCallback(false);
 				}
-			};
-			handlers.share = function(isValidShare, isValidBlock, data) {
-				logger.silly('Handle share, execeuting shareProcessor.handleShare, isValidShare = %s, isValidBlock = %s, data = %s', isValidShare, isValidBlock, JSON.stringify(data))
-				shareProcessor.handleShare(isValidShare, isValidBlock, data);
-			};
-		}
+			}
+		};
+		handlers.share = function(isValidShare, isValidBlock, data) {
+			logger.silly('Handle share, execeuting shareProcessor.handleShare, isValidShare = %s, isValidBlock = %s, data = %s', isValidShare, isValidBlock, JSON.stringify(data))
+			shareProcessor.handleShare(isValidShare, isValidBlock, data);
+		};
 		var authorizeFN = function(ip, port, workerName, password, extraNonce1, version, callback) {
 			handlers.auth(port, workerName, password, function(authorized) {
 				var authString = authorized ? 'Authorized' : 'Unauthorized ';
