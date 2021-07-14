@@ -104,11 +104,11 @@ Change "stratumHost": "raven.cyberpool.org", to your IP or DNS in file config.js
     "cliHost": "127.0.0.1",
     "cliPort": 17117,
     "clustering": {
-        "enabled": false,
+        "enabled": true,
         "forks": "auto"
     },
     "defaultPoolConfigs": {
-        "blockRefreshInterval": 400,
+        "blockRefreshInterval": 333,
         "jobRebroadcastTimeout": 25,
         "connectionTimeout": 600,
         "emitInvalidBlockHashes": false,
@@ -137,9 +137,9 @@ Change "stratumHost": "raven.cyberpool.org", to your IP or DNS in file config.js
         "sslcert": "/home/pool/cyberpool-ravencoin-server/certs/fullchain.pem",
         "stratumHost": "raven.cyberpool.org",
         "stats": {
-            "updateInterval": 900,
-            "historicalRetention": 43200,
-            "hashrateWindow": 900
+            "updateInterval": 60,
+            "historicalRetention": 86400,
+            "hashrateWindow": 600
         }
     },
     "redis": {
@@ -238,16 +238,6 @@ Change "address": "RNs3ne88DoNEnXFTqUrj6zrYejeQpcj4jk", to your pool created wal
         "host": "127.0.0.1",
         "port": 8767,
         "disableTransactions": true
-    },
-    "mposMode": {
-        "enabled": false,
-        "host": "127.0.0.1",
-        "port": 3306,
-        "user": "me",
-        "password": "mypass",
-        "database": "rvn",
-        "checkPassword": true,
-        "autoCreateWorker": false
     }
 }
 
@@ -256,7 +246,7 @@ Change "address": "RNs3ne88DoNEnXFTqUrj6zrYejeQpcj4jk", to your pool created wal
 ### Run Server
     
     cd ~/cyberpool-ravencoin-server
-    sudo bash server-start.sh
+    bash server-start.sh
 
 ### Donates for developers of Cyberpool Ravencoin Server
 
