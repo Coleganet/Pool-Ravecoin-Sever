@@ -30,17 +30,11 @@ module.exports = function(portalConfig, poolConfigs) {
 	this.liveStatConnections = {};
 	this.handleApiRequest = function(req, res, next) {
 		switch (req.params.method) {
-			case 'stats':
+			case 'pool_stats':
 			res.header('Content-Type', 'application/json');
 			res.end(portalStats.statsString);
 			return;
-			case 'getblocksstats':
-			portalStats.getBlocks(function(data){
-				res.header('Content-Type', 'application/json');
-				res.end(JSON.stringify(data));
-			});
-			break;
-			case 'payments':
+			case 'pool_payments':
 			var poolPayments = [];
 			for(var pool in portalStats.stats.pools) {
 				poolPayments.push({name: pool, payments: portalStats.stats.pools[pool].payments});
@@ -48,7 +42,7 @@ module.exports = function(portalConfig, poolConfigs) {
 			res.header('Content-Type', 'application/json');
 			res.end(JSON.stringify(poolPayments));
 			return;
-			case 'blockspending':
+			case 'pool_blockspending':
 			var pendBlocks = [];
 			for(var pool in portalStats.stats.pools) {
 				pendBlocks.push({name: pool, pendingBlocks: portalStats.stats.pools[pool].pending});
@@ -56,7 +50,7 @@ module.exports = function(portalConfig, poolConfigs) {
 			res.header('Content-Type', 'application/json');
 			res.end(JSON.stringify(pendBlocks));
 			return;
-			case 'blocksfound':
+			case 'pool_blocksfound':
 			var listBlocks = [];
 			for(var pool in portalStats.stats.pools) {
 				listBlocks.push({name: pool, foundBlocks: portalStats.stats.pools[pool].blockexp});
@@ -165,7 +159,7 @@ module.exports = function(portalConfig, poolConfigs) {
 			}
 			res.end(JSON.stringify(o));
 			return;
-			case 'pool_stats':
+			case 'pool_statshistory':
 			res.header('Content-Type', 'application/json');
 			res.end(JSON.stringify(portalStats.statPoolHistory));
 			return;
