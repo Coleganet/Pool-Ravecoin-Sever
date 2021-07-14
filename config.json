@@ -18,7 +18,7 @@
         "forks": "auto"
     },
     "defaultPoolConfigs": {
-        "blockRefreshInterval": 400,
+        "blockRefreshInterval": 333,
         "jobRebroadcastTimeout": 25,
         "connectionTimeout": 600,
         "emitInvalidBlockHashes": false,
@@ -47,9 +47,9 @@
         "sslcert": "/home/pool/cyberpool-ravencoin-server/certs/fullchain.pem",
         "stratumHost": "raven.cyberpool.org",
         "stats": {
-            "updateInterval": 900,
-            "historicalRetention": 43200,
-            "hashrateWindow": 900
+            "updateInterval": 60,
+            "historicalRetention": 86400,
+            "hashrateWindow": 600
         }
     },
     "redis": {
