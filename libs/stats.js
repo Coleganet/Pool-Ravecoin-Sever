@@ -277,7 +277,9 @@ module.exports = function(portalConfig, poolConfigs) {
 				['zrange', ':payments', -50, -1],
 				['zrevrange', ':lastBlock', 0, 0],
 				['zrevrange', ':lastBlockTime', 0, 0],
-				['zrange', ':blockExplorer', -64, -1]
+				['zrange', ':blockExplorer', -100000, -1],
+				['zrange', ':blockExplorer', -15, -1],
+				['zrange', ':blockExplorer', -50, -1]
 			];
 			var commandsPerCoin = redisCommandTemplates.length;
 			client.coins.map(function(coin) {
@@ -328,23 +330,16 @@ module.exports = function(portalConfig, poolConfigs) {
 							networkDiff: replies[i + 2] ? (replies[i + 2].networkDiff || 0) : 0,
 							networkHash: replies[i + 2] ? (replies[i + 2].networkHash || 0) : 0,
 							blocks: {
-								blocksFound: replies[i + 3],
+								total: replies[i + 2] ? (replies[i + 2].validBlocks || 0) : 0,
 								pending: replies[i + 7],
 								confirmed: replies[i + 8],
 								orphaned: replies[i + 9],
-								lastBlock: replies[i + 14] 
-							},
-							pending: {
-								blocks: replies[i + 10].sort(sortBlocks).slice(0,50)
-							},
-							confirmed: {
-								blocks: replies[i + 11].sort(sortBlocks).slice(0,50)
-							},
-							orphaned: {
-								blocks: replies[i + 12].sort(sortBlocks).slice(0,50)
+								lastBlock: replies[i + 14]
 							},
 							payments: [],
 							blockexp: [],
+							blockexp15: [],
+							blockexp50: [],
 							currentRoundShares: (replies[i + 4] || {}),
 							lastBlockTime: (replies[i + 15] || {}),
 							shareCount: 0
@@ -369,6 +364,28 @@ module.exports = function(portalConfig, poolConfigs) {
 							}
 							if (jsonObj !== null) {
 								coinStats.blockexp.push(jsonObj);
+							}
+						}
+						for(var l = replies[i + 17].length; l > 0; l--) {
+							var jsonObj;
+							try {
+								jsonObj = JSON.parse(replies[i + 17][l-1]);
+							} catch(e) {
+								jsonObj = null;
+							}
+							if (jsonObj !== null) {
+								coinStats.blockexp15.push(jsonObj);
+							}
+						}
+						for(var m = replies[i + 18].length; m > 0; m--) {
+							var jsonObj;
+							try {
+								jsonObj = JSON.parse(replies[i + 18][m-1]);
+							} catch(e) {
+								jsonObj = null;
+							}
+							if (jsonObj !== null) {
+								coinStats.blockexp50.push(jsonObj);
 							}
 						}
 						allCoinStats[coinStats.name] = (coinStats);
