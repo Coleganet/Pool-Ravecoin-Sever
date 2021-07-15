@@ -42,14 +42,6 @@ module.exports = function(portalConfig, poolConfigs) {
 			res.header('Content-Type', 'application/json');
 			res.end(JSON.stringify(poolPayments));
 			return;
-			case 'pool_blockspending':
-			var pendBlocks = [];
-			for(var pool in portalStats.stats.pools) {
-				pendBlocks.push({name: pool, pendingBlocks: portalStats.stats.pools[pool].pending});
-			}
-			res.header('Content-Type', 'application/json');
-			res.end(JSON.stringify(pendBlocks));
-			return;
 			case 'pool_blocksfound':
 			var listBlocks = [];
 			for(var pool in portalStats.stats.pools) {
