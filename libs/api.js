@@ -65,7 +65,7 @@ module.exports = function(portalConfig, poolConfigs) {
 								var totalHash = parseFloat(0.0);
 								var totalHeld = parseFloat(0.0);
 								var totalShares = shares;
-								var networkSols = 0;
+								var networkHash = 0;
 								var networkDiff = 0;
 								for (var h in portalStats.statHistory) {
 									for (var pool in portalStats.statHistory[h].pools) {
@@ -99,7 +99,7 @@ module.exports = function(portalConfig, poolConfigs) {
 											workers[w].immature = (workers[w].immature || 0);
 											workers[w].paid = (workers[w].paid || 0);
 											totalHash += portalStats.stats.pools[pool].workers[w].hashrate;
-											networkSols = portalStats.stats.pools[pool].poolStats.networkSols;
+											networkHash = portalStats.stats.pools[pool].poolStats.networkHash;
 											networkDiff = portalStats.stats.pools[pool].poolStats.networkDiff;
 										}
 									}
@@ -108,7 +108,7 @@ module.exports = function(portalConfig, poolConfigs) {
 									miner: address,
 									totalHash: totalHash,
 									totalShares: totalShares,
-									networkSols: networkSols,
+									networkHash: networkHash,
 									networkDiff: networkDiff,
 									immature: (balances.totalImmature * 100000000),
 									balance: balances.totalHeld,
@@ -147,7 +147,7 @@ module.exports = function(portalConfig, poolConfigs) {
 				var intMinPymt = poolConfigs[pool].paymentProcessing.minimumPayment || 0;                 
 				var strSchema = poolConfigs[pool].paymentProcessing.schema || "PROP";  
 				tmpStr = functions.secToDHMSStr(intSec);            
-				o.pools.push({"coin":pool, "fee": ttotal, "payoutscheme":strSchema, "interval":intSec, "intervalstr":tmpStr, "minimum": intMinPymt});
+				o.pools.push({"coin": pool, "fee": ttotal, "payoutscheme": strSchema, "interval": intSec, "intervalstr": tmpStr, "minimum": intMinPymt});
 			}
 			res.end(JSON.stringify(o));
 			return;
