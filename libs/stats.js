@@ -221,12 +221,12 @@ module.exports = function(portalConfig, poolConfigs) {
 								totalHeld += balAmount;
 							}
 						} 
-						for (var b in pends[1]) {
-							if (Math.abs(b % 2) != 1) {
-								workerName = String(pends[1][b]);
+						for (var c in pends[1]) {
+							if (Math.abs(c % 2) != 1) {
+								workerName = String(pends[1][c]);
 								workers[workerName] = (workers[workerName] || {});
 							} else {
-								pendingAmount = parseFloat(pends[1][b]);
+								pendingAmount = parseFloat(pends[1][c]);
 								workers[workerName].immature = coinsRound(pendingAmount);
 								totalImmature += pendingAmount;
 							}
