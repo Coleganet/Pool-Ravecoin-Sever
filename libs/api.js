@@ -35,28 +35,70 @@ module.exports = function(portalConfig, poolConfigs) {
 			res.end(portalStats.statsString);
 			return;
 			case 'pool_payments':
+			res.header('Content-Type', 'application/json');
 			var poolPayments = [];
 			for(var pool in portalStats.stats.pools) {
-				poolPayments.push({name: pool, payments: portalStats.stats.pools[pool].payments});
+				poolPayments.push({payments: portalStats.stats.pools[pool].payments});
 			}
-			res.header('Content-Type', 'application/json');
 			res.end(JSON.stringify(poolPayments));
 			return;
-			case 'pool_blocksfound':
+			case 'pool_dashboard':
+			res.header('Content-Type', 'application/json');
+			var poolDashboard = [];
+			for(var pool in portalStats.stats.pools) {
+				poolDashboard.push({
+					stats: portalStats.stats.pools[pool].poolStats,
+					poolfee: portalStats.stats.pools[pool].poolFee,
+					poolhash: portalStats.stats.pools[pool].hashrate,
+					effort: portalStats.stats.pools[pool].shareCount,
+					ttf: portalStats.stats.pools[pool].timeToFind,
+					miners: portalStats.stats.pools[pool].minerCount,
+					workers: portalStats.stats.pools[pool].workerCount
+				});
+			}
+			res.end(JSON.stringify(poolDashboard));
+			return;
+			case 'pool_miners':
+			res.header('Content-Type', 'application/json');
+			var poolMiners = [];
+			for(var pool in portalStats.stats.pools) {
+				poolMiners.push({miners: portalStats.stats.pools[pool].miners});
+			}
+			res.end(JSON.stringify(poolMiners));
+			return;
+			case 'pool_blocksall':
+			res.header('Content-Type', 'application/json');
 			var listBlocks = [];
 			for(var pool in portalStats.stats.pools) {
-				listBlocks.push({name: pool, foundBlocks: portalStats.stats.pools[pool].blockexp});
+				listBlocks.push({blocks: portalStats.stats.pools[pool].blockexp});
 			}
-			res.header('Content-Type', 'application/json');
 			res.end(JSON.stringify(listBlocks));
+			return;
+			case 'pool_blocks15':
+			res.header('Content-Type', 'application/json');
+			var listBlocks15 = [];
+			for(var pool in portalStats.stats.pools) {
+				listBlocks15.push({blocks: portalStats.stats.pools[pool].blockexp15});
+			}
+			res.end(JSON.stringify(listBlocks15));
+			return;
+			case 'pool_blocks50':
+			res.header('Content-Type', 'application/json');
+			var listBlocks50 = [];
+			for(var pool in portalStats.stats.pools) {
+				listBlocks50.push({blocks: portalStats.stats.pools[pool].blockexp50});
+			}
+			res.end(JSON.stringify(listBlocks50));
 			return;
 			case 'worker_stats':
 			res.header('Content-Type', 'application/json');
 			if (req.url.indexOf("?") > 0) {
 				var url_parms = req.url.split("?");
 				if (url_parms.length > 0) {
-					var history = {};
+					var historyworkers = {};
+					var historyminer = {};
 					var workers = {};
+					var miner = {};
 					var address = url_parms[1] || null;
 					if (address != null && address.length > 0) {
 						address = address.split(".")[0];
@@ -71,13 +113,26 @@ module.exports = function(portalConfig, poolConfigs) {
 									for (var pool in portalStats.statHistory[h].pools) {
 										for (var w in portalStats.statHistory[h].pools[pool].workers) {
 											if (w.startsWith(address)) {
-												if (history[w] == null) {
-													history[w] = [];
+												if (historyworkers[w] == null) {
+													historyworkers[w] = [];
 												}
 												if (portalStats.statHistory[h].pools[pool].workers[w].hashrate) {
-													history[w].push({
+													historyworkers[w].push({
 														time: portalStats.statHistory[h].time,
 														hashrate: portalStats.statHistory[h].pools[pool].workers[w].hashrate
+													});
+												}
+											}
+										}
+										for (var m in portalStats.statHistory[h].pools[pool].miners) {
+											if (m.startsWith(address)) {
+												if (historyminer[m] == null) {
+													historyminer[m] = [];
+												}
+												if (portalStats.statHistory[h].pools[pool].miners[m].hashrate) {
+													historyminer[m].push({
+														time: portalStats.statHistory[h].time,
+														hashrate: portalStats.statHistory[h].pools[pool].miners[m].hashrate
 													});
 												}
 											}
@@ -104,8 +159,15 @@ module.exports = function(portalConfig, poolConfigs) {
 										}
 									}
 								}
+								for (var pool in portalStats.stats.pools) {
+									for (var m in portalStats.stats.pools[pool].miners) {
+										if (m.startsWith(address)) {
+											miner[m] = portalStats.stats.pools[pool].miners[m];
+										}
+									}
+								}
 								res.end(JSON.stringify({
-									miner: address,
+									mineradress: address,
 									totalHash: totalHash,
 									totalShares: totalShares,
 									networkHash: networkHash,
@@ -113,8 +175,11 @@ module.exports = function(portalConfig, poolConfigs) {
 									immature: (balances.totalImmature * 100000000),
 									balance: balances.totalHeld,
 									paid: balances.totalPaid,
+									miner: miner,
 									workers: workers,
-									history: history
+									historyminer: historyminer,
+									historyworkers: historyworkers
+
 								}));
 							});
 						});
@@ -135,7 +200,6 @@ module.exports = function(portalConfig, poolConfigs) {
 			}
 			return;
 			case 'pool_fees':
-			res.header('Content-Type', 'application/json');
 			var o = { pools : [] };
 			for (var pool in poolConfigs) {
 				var ttotal = 0.0;
@@ -147,8 +211,9 @@ module.exports = function(portalConfig, poolConfigs) {
 				var intMinPymt = poolConfigs[pool].paymentProcessing.minimumPayment || 0;                 
 				var strSchema = poolConfigs[pool].paymentProcessing.schema || "PROP";  
 				tmpStr = functions.secToDHMSStr(intSec);            
-				o.pools.push({"coin": pool, "fee": ttotal, "payoutscheme": strSchema, "interval": intSec, "intervalstr": tmpStr, "minimum": intMinPymt});
+				o.pools.push({"coin":pool, "fee":ttotal, "payoutscheme":strSchema, "interval":intSec, "intervalstr":tmpStr, "minimum":intMinPymt});
 			}
+			res.header('Content-Type', 'application/json');
 			res.end(JSON.stringify(o));
 			return;
 			case 'pool_statshistory':
