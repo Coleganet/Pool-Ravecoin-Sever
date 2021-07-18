@@ -37,44 +37,44 @@ var util = require('stratum-pool/lib/util.js');
 var api = require('./api.js');
 
 module.exports = function () {
-    var portalConfig = JSON.parse(process.env.portalConfig);
+    	var portalConfig = JSON.parse(process.env.portalConfig);
 	var poolConfigs = JSON.parse(process.env.pools);
 	var websiteConfig = portalConfig.website;
 	var portalApi = new api(portalConfig, poolConfigs);
 	var portalStats = portalApi.stats;
 	var logSystem = 'Server';
     
-    portalStats.getGlobalStats(function () {
-    });
-    var buildUpdatedWebsite = function () {
-        portalStats.getGlobalStats(function () {
-	    var statData = 'data: ' + JSON.stringify(portalStats.stats) + '\n\n';
-	    for (var uid in portalApi.liveStatConnections) {
-		var res = portalApi.liveStatConnections[uid];
-		res.write(statData);
-	    }
+	portalStats.getGlobalStats(function () {
 	});
-    };
-    setInterval(buildUpdatedWebsite, websiteConfig.stats.updateInterval * 1000);
+	var buildUpdatedWebsite = function () {
+		portalStats.getGlobalStats(function () {
+			var statData = 'data: ' + JSON.stringify(portalStats.stats) + '\n\n';
+			for (var uid in portalApi.liveStatConnections) {
+				var res = portalApi.liveStatConnections[uid];
+				res.write(statData);
+			}
+		});
+	};
+	setInterval(buildUpdatedWebsite, websiteConfig.stats.updateInterval * 1000);
 
-    var app = express();
-    app.use(cors());
-    app.get('/api/:method', function (req, res, next) {
-	portalApi.handleApiRequest(req, res, next);
-    });
-    app.use(compress());
-    app.use(function(err, req, res, next) {
-        console.error(err.stack);
-        res.send(500, 'Something broke!');
-    });
-
-    try {
-        logger.info('SERVER> Attempting to start Server on %s:%s', portalConfig.website.host,portalConfig.website.port);
-	http.createServer(app).listen(portalConfig.website.port, portalConfig.website.host, function () {
-	    logger.info('SERVER> Server started on %s:%s', portalConfig.website.host,portalConfig.website.port);
+	var app = express();
+	app.use(cors());
+	app.get('/api/:method', function (req, res, next) {
+		portalApi.handleApiRequest(req, res, next);
 	});
+	app.use(compress());
+	app.use(function(err, req, res, next) {
+		console.error(err.stack);
+		res.send(500, 'Something broke!');
+	});
+
+	try {
+		logger.info('SERVER> Attempting to start Server on %s:%s', portalConfig.website.host,portalConfig.website.port);
+		http.createServer(app).listen(portalConfig.website.port, portalConfig.website.host, function () {
+			logger.info('SERVER> Server started on %s:%s', portalConfig.website.host,portalConfig.website.port);
+		});
 	} catch (e) {
-	     logger.error('SERVER> e = %s', JSON.stringify(e));
-	    logger.error('SERVER> Could not start server on %s:%s - its either in use or you do not have permission', portalConfig.website.host,portalConfig.website.port);
+		logger.error('SERVER> e = %s', JSON.stringify(e));
+		logger.error('SERVER> Could not start server on %s:%s - its either in use or you do not have permission', portalConfig.website.host,portalConfig.website.port);
 	}
 };
