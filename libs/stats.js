@@ -311,6 +311,14 @@ module.exports = function(portalConfig, poolConfigs) {
 							hashrates: replies[i + 1],
 							rewardRecipients: poolConfigs[coinName].rewardRecipients,
 							poolStats: {
+								symb: poolConfigs[coinName].coin.symbol.toUpperCase(),
+								algo: poolConfigs[coinName].coin.algorithm,
+								sheme: poolConfigs[coinName].paymentProcessing.schema,
+								minPay: poolConfigs[coinName].paymentProcessing.minimumPayment,
+								intPay: readableSeconds(poolConfigs[coinName].paymentProcessing.paymentInterval),
+								ports: poolConfigs[coinName].ports,
+								expBlock: poolConfigs[coinName].coin.explorerGetBlock,
+								expTX: poolConfigs[coinName].coin.explorerGetTX,
 								poolStartTime: replies[i + 2] ? (replies[i + 2].poolStartTime || 0) : 0,
 								validShares: replies[i + 2] ? (replies[i + 2].validShares || 0) : 0,
 								invalidShares: replies[i + 2] ? (replies[i + 2].invalidShares || 0) : 0,
@@ -327,14 +335,12 @@ module.exports = function(portalConfig, poolConfigs) {
 								networkActive: replies[i + 2] ? (replies[i + 2].networkActive || 0) : 0,
 								networkReward: replies[i + 2] ? (replies[i + 2].networkReward || 0) : 0
 							},
-							networkDiff: replies[i + 2] ? (replies[i + 2].networkDiff || 0) : 0,
-							networkHash: replies[i + 2] ? (replies[i + 2].networkHash || 0) : 0,
 							blocks: {
 								total: replies[i + 2] ? (replies[i + 2].validBlocks || 0) : 0,
 								pending: replies[i + 7],
 								confirmed: replies[i + 8],
 								orphaned: replies[i + 9],
-								lastBlock: replies[i + 14]
+								lastBlock: replies[i + 14] 
 							},
 							payments: [],
 							blockexp: [],
@@ -342,6 +348,7 @@ module.exports = function(portalConfig, poolConfigs) {
 							blockexp50: [],
 							currentRoundShares: (replies[i + 4] || {}),
 							lastBlockTime: (replies[i + 15] || {}),
+							poolFee: 0,
 							shareCount: 0
 						};
 						for(var j = replies[i + 13].length; j > 0; j--) {
@@ -525,6 +532,12 @@ module.exports = function(portalConfig, poolConfigs) {
 				}
 				portalStats.algos[algo].hashrate += coinStats.hashrate;
 				portalStats.algos[algo].workers += Object.keys(coinStats.workers).length;
+				var _feeTotal = 0.0;
+				var rewardRecipients = coinStats.rewardRecipients || {};
+				for (var r in rewardRecipients) {
+					_feeTotal += rewardRecipients[r];
+				}
+				coinStats.poolFee = _feeTotal;
 				var _shareTotal = parseFloat(0);
 				for (var worker in coinStats.currentRoundShares) {
 					var miner = worker.split(".")[0];
@@ -550,11 +563,11 @@ module.exports = function(portalConfig, poolConfigs) {
 					coinStats.workers[worker].hashrateString = _this.getReadableHashrateString(_workerRate);
 				}
 				for (var miner in coinStats.miners) {
-					var _workerRate = shareMultiplier * coinStats.miners[miner].shares / portalConfig.website.stats.hashrateWindow;
-					coinStats.miners[miner].luckDays = ((_networkHashRate / _workerRate * _blocktime) / (24 * 60 * 60)).toFixed(3);
-					coinStats.miners[miner].luckHours = ((_networkHashRate / _workerRate * _blocktime) / (60 * 60)).toFixed(3);
-					coinStats.miners[miner].hashrate = _workerRate;
-					coinStats.miners[miner].hashrateString = _this.getReadableHashrateString(_workerRate);
+					var _minerRate = shareMultiplier * coinStats.miners[miner].shares / portalConfig.website.stats.hashrateWindow;
+					coinStats.miners[miner].luckDays = ((_networkHashRate / _minerRate * _blocktime) / (24 * 60 * 60)).toFixed(3);
+					coinStats.miners[miner].luckHours = ((_networkHashRate / _minerRate * _blocktime) / (60 * 60)).toFixed(3);
+					coinStats.miners[miner].hashrate = _minerRate;
+					coinStats.miners[miner].hashrateString = _this.getReadableHashrateString(_minerRate);
 				}
 				coinStats.workers = sortMinersByHashrate(coinStats.workers);
 				coinStats.miners = sortMinersByHashrate(coinStats.miners);
