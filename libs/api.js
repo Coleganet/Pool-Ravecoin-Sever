@@ -53,7 +53,8 @@ module.exports = function(portalConfig, poolConfigs) {
 					effort: portalStats.stats.pools[pool].shareCount,
 					ttf: portalStats.stats.pools[pool].timeToFind,
 					miners: portalStats.stats.pools[pool].minerCount,
-					workers: portalStats.stats.pools[pool].workerCount
+					workers: portalStats.stats.pools[pool].workerCount,
+					lastblock: portalStats.stats.pools[pool].lastBlockDate
 				});
 			}
 			res.end(JSON.stringify(poolDashboard));
