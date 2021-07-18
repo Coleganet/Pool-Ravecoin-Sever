@@ -48,8 +48,8 @@
         "stratumHost": "raven.cyberpool.org",
         "stats": {
             "updateInterval": 60,
-            "historicalRetention": 86400,
-            "hashrateWindow": 600
+            "historicalRetention": 43200,
+            "hashrateWindow": 300
         }
     },
     "redis": {
