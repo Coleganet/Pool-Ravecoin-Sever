@@ -340,7 +340,7 @@ module.exports = function(portalConfig, poolConfigs) {
 								pending: replies[i + 7],
 								confirmed: replies[i + 8],
 								orphaned: replies[i + 9],
-								lastBlock: replies[i + 14] 
+								lastBlock: replies[i + 14]
 							},
 							payments: [],
 							blockexp: [],
