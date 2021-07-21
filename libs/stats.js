@@ -307,7 +307,8 @@ module.exports = function(portalConfig, poolConfigs) {
 							ports: poolConfigs[coinName].ports,
 							explorerGetBlock: poolConfigs[coinName].coin.explorerGetBlock,
 							explorerGetBlockJSON: poolConfigs[coinName].coin.explorerGetBlockJSON,
-							explorerGetTX: poolConfigs[coinName].coin.explorerGetTX,
+							explorerGetTx: poolConfigs[coinName].coin.explorerGetTX,
+							explorerGetAddress: poolConfigs[coinName].coin.explorerGetAddress,
 							hashrates: replies[i + 1],
 							rewardRecipients: poolConfigs[coinName].rewardRecipients,
 							poolStats: {
