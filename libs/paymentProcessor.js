@@ -635,6 +635,7 @@ function SetupForPool(poolOptions, setupFinished) {
 						}
 						var paymentBlocks = rounds.filter(r => r.category == 'generate').map(r => parseInt(r.height));
 						var paymentBlockID = rounds.filter(r => r.category == 'generate').map(r => r.blockHash);
+
 						var paymentsUpdate = [];
 						var paymentsData = {
 							time: Date.now(),
