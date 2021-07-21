@@ -7,6 +7,7 @@
     "explorerGetBlockJSON": "https://explorer.ravenland.org/api/getrawtransaction?decrypt=1&txid=",
     "explorerGetBlock": "https://explorer.ravenland.org/block/",
     "explorerGetTX": "https://explorer.ravenland.org/tx/",
+    "explorerGetAddress": "https://explorer.ravenland.org/address/",
     "blockTime": 60,
     "blockChange": 1   
 }
