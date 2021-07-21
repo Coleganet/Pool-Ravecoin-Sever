@@ -38,7 +38,11 @@ module.exports = function(portalConfig, poolConfigs) {
 			res.header('Content-Type', 'application/json');
 			var poolPayments = [];
 			for(var pool in portalStats.stats.pools) {
-				poolPayments.push({payments: portalStats.stats.pools[pool].payments});
+				poolPayments.push({
+					txlink: portalStats.stats.pools[pool].explorerGetTx,
+					symbol: portalStats.stats.pools[pool].symbol,
+					payments: portalStats.stats.pools[pool].payments
+				});
 			}
 			res.end(JSON.stringify(poolPayments));
 			return;
@@ -59,6 +63,16 @@ module.exports = function(portalConfig, poolConfigs) {
 			}
 			res.end(JSON.stringify(poolDashboard));
 			return;
+			case 'pool_ports':
+			res.header('Content-Type', 'application/json');
+			var poolPorts = [];
+			for(var pool in portalStats.stats.pools) {
+				poolPorts.push({
+					ports: portalStats.stats.pools[pool].poolStats.ports
+				});
+			}
+			res.end(JSON.stringify(poolPorts));
+			return;
 			case 'pool_miners':
 			res.header('Content-Type', 'application/json');
 			var poolMiners = [];
@@ -71,7 +85,10 @@ module.exports = function(portalConfig, poolConfigs) {
 			res.header('Content-Type', 'application/json');
 			var listBlocks = [];
 			for(var pool in portalStats.stats.pools) {
-				listBlocks.push({blocks: portalStats.stats.pools[pool].blockexp});
+				listBlocks.push({
+					symbol: portalStats.stats.pools[pool].symbol,
+					blocks: portalStats.stats.pools[pool].blockexp
+				});
 			}
 			res.end(JSON.stringify(listBlocks));
 			return;
@@ -87,7 +104,12 @@ module.exports = function(portalConfig, poolConfigs) {
 			res.header('Content-Type', 'application/json');
 			var listBlocks50 = [];
 			for(var pool in portalStats.stats.pools) {
-				listBlocks50.push({blocks: portalStats.stats.pools[pool].blockexp50});
+				listBlocks50.push({
+					blocklink: portalStats.stats.pools[pool].explorerGetBlock,
+					addresslink: portalStats.stats.pools[pool].explorerGetAddress,
+					symbol: portalStats.stats.pools[pool].symbol,
+					blocks: portalStats.stats.pools[pool].blockexp50
+				});
 			}
 			res.end(JSON.stringify(listBlocks50));
 			return;
@@ -155,6 +177,8 @@ module.exports = function(portalConfig, poolConfigs) {
 											workers[w].immature = (workers[w].immature || 0);
 											workers[w].paid = (workers[w].paid || 0);
 											totalHash += portalStats.stats.pools[pool].workers[w].hashrate;
+											poolHash = portalStats.stats.pools[pool].hashrate;
+											coinTicker = portalStats.stats.pools[pool].symbol;
 											networkHash = portalStats.stats.pools[pool].poolStats.networkHash;
 											networkDiff = portalStats.stats.pools[pool].poolStats.networkDiff;
 										}
@@ -168,9 +192,11 @@ module.exports = function(portalConfig, poolConfigs) {
 									}
 								}
 								res.end(JSON.stringify({
-									mineradress: address,
+									coinTicker: coinTicker,
+									mineraddress: address,
 									totalHash: totalHash,
 									totalShares: totalShares,
+									poolHash: poolHash,
 									networkHash: networkHash,
 									networkDiff: networkDiff,
 									immature: (balances.totalImmature * 100000000),
