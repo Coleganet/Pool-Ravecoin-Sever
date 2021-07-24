@@ -177,8 +177,6 @@ module.exports = function(portalConfig, poolConfigs) {
 											workers[w].immature = (workers[w].immature || 0);
 											workers[w].paid = (workers[w].paid || 0);
 											totalHash += portalStats.stats.pools[pool].workers[w].hashrate;
-											poolHash = portalStats.stats.pools[pool].hashrate;
-											coinTicker = portalStats.stats.pools[pool].symbol;
 											networkHash = portalStats.stats.pools[pool].poolStats.networkHash;
 											networkDiff = portalStats.stats.pools[pool].poolStats.networkDiff;
 										}
@@ -191,11 +189,17 @@ module.exports = function(portalConfig, poolConfigs) {
 										}
 									}
 								}
+								for (var pool in portalStats.stats.pools) {
+									tshares = portalStats.stats.pools[pool].shareCount;
+									coinTicker = portalStats.stats.pools[pool].symbol;
+									poolHash = portalStats.stats.pools[pool].hashrate;
+								}
 								res.end(JSON.stringify({
 									coinTicker: coinTicker,
 									mineraddress: address,
 									totalHash: totalHash,
 									totalShares: totalShares,
+									poolShares: tshares,
 									poolHash: poolHash,
 									networkHash: networkHash,
 									networkDiff: networkDiff,
