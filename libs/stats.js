@@ -199,7 +199,7 @@ module.exports = function(portalConfig, poolConfigs) {
 						var workerName = "";
 						var balAmount = 0;
 						var paidAmount = 0;
-						var pendingAmount = 0;
+						var pendAmount = 0;
 						var workers = {};
 						for (var i in pays[1]) {
 							if (Math.abs(i % 2) != 1) {
@@ -226,9 +226,9 @@ module.exports = function(portalConfig, poolConfigs) {
 								workerName = String(pends[1][c]);
 								workers[workerName] = (workers[workerName] || {});
 							} else {
-								pendingAmount = parseFloat(pends[1][c]);
-								workers[workerName].immature = coinsRound(pendingAmount);
-								totalImmature += pendingAmount;
+								pendAmount = parseFloat(pends[1][c]);
+								workers[workerName].immature = coinsRound(pendAmount);
+								totalImmature += pendAmount;
 							}
 						}
 						for (var w in workers) {
@@ -251,7 +251,7 @@ module.exports = function(portalConfig, poolConfigs) {
 			}
 			_this.stats.balances = balances;
 			_this.stats.address = address;
-			cback({totalHeld: coinsRound(totalHeld), totalPaid: coinsRound(totalPaid), totalImmature: satoshisToCoins(totalImmature), balances});
+			cback({totalHeld: coinsRound(totalHeld), totalPaid: coinsRound(totalPaid), totalImmature: coinsRound(totalImmature), balances});
 		});
 	};
 	this.getGlobalStats = function(callback) {
