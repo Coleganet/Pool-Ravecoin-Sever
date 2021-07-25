@@ -187,6 +187,7 @@ module.exports = function(portalConfig, poolConfigs) {
 								}
 								for (var pool in portalStats.stats.pools) {
 									var coinTicker = portalStats.stats.pools[pool].symbol;
+									var blockReward = portalStats.stats.pools[pool].poolStats.networkReward;
 									var totalPoolHash = portalStats.stats.pools[pool].hashrate;
 									var totalPoolShares = portalStats.stats.pools[pool].shareCount;
 									var networkHash = portalStats.stats.pools[pool].poolStats.networkHash;
@@ -194,6 +195,7 @@ module.exports = function(portalConfig, poolConfigs) {
 								}
 								res.end(JSON.stringify({
 									coinTicker: coinTicker,
+									lastBlockReward: blockReward,
 									mineraddress: address,
 									totalHash: totalHash,
 									totalShares: totalShares,
