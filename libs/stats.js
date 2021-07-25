@@ -197,18 +197,26 @@ module.exports = function(portalConfig, poolConfigs) {
 				client.hscan(coin + ':balances', 0, "match", a + "*", "count", 10000, function(error, bals) {
 					client.hscan(coin + ':payouts', 0, "match", a + "*", "count", 10000, function(error, pays) {
 						var workerName = "";
+						var workers = {};
+						var pendAmount = 0;
 						var balAmount = 0;
 						var paidAmount = 0;
-						var pendAmount = 0;
-						var workers = {};
-						for (var i in pays[1]) {
-							if (Math.abs(i % 2) != 1) {
-								workerName = String(pays[1][i]);
+						for (var w in workers) {
+							balances.push({
+								worker: String(w),
+								balance: workers[w].balance,
+								paid: workers[w].paid,
+								immature: workers[w].immature
+							});
+						}
+						for (var c in pends[1]) {
+							if (Math.abs(c % 2) != 1) {
+								workerName = String(pends[1][c]);
 								workers[workerName] = (workers[workerName] || {});
 							} else {
-								paidAmount = parseFloat(pays[1][i]);
-								workers[workerName].paid = coinsRound(paidAmount);
-								totalPaid += paidAmount;
+								pendAmount = parseFloat(pends[1][c]);
+								workers[workerName].immature = coinsRound(pendAmount);
+								totalImmature += pendAmount;
 							}
 						}
 						for (var b in bals[1]) {
@@ -221,23 +229,15 @@ module.exports = function(portalConfig, poolConfigs) {
 								totalHeld += balAmount;
 							}
 						} 
-						for (var c in pends[1]) {
-							if (Math.abs(c % 2) != 1) {
-								workerName = String(pends[1][c]);
+						for (var i in pays[1]) {
+							if (Math.abs(i % 2) != 1) {
+								workerName = String(pays[1][i]);
 								workers[workerName] = (workers[workerName] || {});
 							} else {
-								pendAmount = parseFloat(pends[1][c]);
-								workers[workerName].immature = coinsRound(pendAmount);
-								totalImmature += pendAmount;
+								paidAmount = parseFloat(pays[1][i]);
+								workers[workerName].paid = coinsRound(paidAmount);
+								totalPaid += paidAmount;
 							}
-						}
-						for (var w in workers) {
-							balances.push({
-								worker: String(w),
-								balance: workers[w].balance,
-								paid: workers[w].paid,
-								immature: workers[w].immature
-							});
 						}
 						pcb();
 					});
@@ -251,7 +251,7 @@ module.exports = function(portalConfig, poolConfigs) {
 			}
 			_this.stats.balances = balances;
 			_this.stats.address = address;
-			cback({totalHeld: coinsRound(totalHeld), totalPaid: coinsRound(totalPaid), totalImmature: coinsRound(totalImmature), balances});
+			cback({totalImmature: coinsRound(totalImmature), totalHeld: coinsRound(totalHeld), totalPaid: coinsRound(totalPaid), balances});
 		});
 	};
 	this.getGlobalStats = function(callback) {
