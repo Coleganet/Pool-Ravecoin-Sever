@@ -214,10 +214,10 @@ Change "address": "RNs3ne88DoNEnXFTqUrj6zrYejeQpcj4jk", to your pool created wal
     	    }
         },
 	"10256": {
-	    "diff": 1024000000,
+	    "diff": 6,
             "varDiff": {
-                "minDiff": 1024000000,
-                "maxDiff": 20480000000,
+                "minDiff": 4,
+                "maxDiff": 8,
     	        "targetTime": 10,
     	        "retargetTime": 60,
     	        "variancePercent": 30,
