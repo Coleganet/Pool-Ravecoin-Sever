@@ -137,9 +137,9 @@ Change "stratumHost": "raven.cyberpool.org", to your IP or DNS in file config.js
         "sslcert": "/home/pool/cyberpool-ravencoin-server/certs/fullchain.pem",
         "stratumHost": "raven.cyberpool.org",
         "stats": {
-            "updateInterval": 60,
-            "historicalRetention": 86400,
-            "hashrateWindow": 600
+            "updateInterval": 300,
+            "historicalRetention": 43200,
+            "hashrateWindow": 300
         }
     },
     "redis": {
