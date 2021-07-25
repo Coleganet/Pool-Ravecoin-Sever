@@ -130,8 +130,6 @@ module.exports = function(portalConfig, poolConfigs) {
 								var totalHash = parseFloat(0.0);
 								var totalHeld = parseFloat(0.0);
 								var totalShares = shares;
-								var networkHash = 0;
-								var networkDiff = 0;
 								for (var h in portalStats.statHistory) {
 									for (var pool in portalStats.statHistory[h].pools) {
 										for (var w in portalStats.statHistory[h].pools[pool].workers) {
@@ -177,8 +175,6 @@ module.exports = function(portalConfig, poolConfigs) {
 											workers[w].immature = (workers[w].immature || 0);
 											workers[w].paid = (workers[w].paid || 0);
 											totalHash += portalStats.stats.pools[pool].workers[w].hashrate;
-											networkHash = portalStats.stats.pools[pool].poolStats.networkHash;
-											networkDiff = portalStats.stats.pools[pool].poolStats.networkDiff;
 										}
 									}
 								}
@@ -190,17 +186,19 @@ module.exports = function(portalConfig, poolConfigs) {
 									}
 								}
 								for (var pool in portalStats.stats.pools) {
-									tshares = portalStats.stats.pools[pool].shareCount;
-									coinTicker = portalStats.stats.pools[pool].symbol;
-									poolHash = portalStats.stats.pools[pool].hashrate;
+									var coinTicker = portalStats.stats.pools[pool].symbol;
+									var totalPoolHash = portalStats.stats.pools[pool].hashrate;
+									var totalPoolShares = portalStats.stats.pools[pool].shareCount;
+									var networkHash = portalStats.stats.pools[pool].poolStats.networkHash;
+									var networkDiff = portalStats.stats.pools[pool].poolStats.networkDiff;
 								}
 								res.end(JSON.stringify({
 									coinTicker: coinTicker,
 									mineraddress: address,
 									totalHash: totalHash,
 									totalShares: totalShares,
-									poolShares: tshares,
-									poolHash: poolHash,
+									totalPoolShares: totalPoolShares,
+									totalPoolHash: totalPoolHash,
 									networkHash: networkHash,
 									networkDiff: networkDiff,
 									immature: (balances.totalImmature * 100000000),
