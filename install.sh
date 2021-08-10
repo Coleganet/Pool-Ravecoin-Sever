@@ -44,8 +44,8 @@ sudo chown -R $USER:$GROUP ~/.nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-nvm install v12.22.2
-nvm use v12.22.2
+nvm install v12.22.4
+nvm use v12.22.4
 
 npm update -g
 npm install -g pm2@5.1.0
