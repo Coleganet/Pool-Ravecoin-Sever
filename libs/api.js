@@ -108,6 +108,7 @@ module.exports = function(portalConfig, poolConfigs) {
 					blocklink: portalStats.stats.pools[pool].explorerGetBlock,
 					addresslink: portalStats.stats.pools[pool].explorerGetAddress,
 					symbol: portalStats.stats.pools[pool].symbol,
+					curblock: portalStats.stats.pools[pool].poolStats.networkBlocks,
 					blocks: portalStats.stats.pools[pool].blockexp50
 				});
 			}
