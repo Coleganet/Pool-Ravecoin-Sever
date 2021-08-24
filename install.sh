@@ -44,11 +44,11 @@ sudo chown -R $USER:$GROUP ~/.nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-nvm install v12.22.4
-nvm use v12.22.4
+nvm install v12.22.5
+nvm use v12.22.5
 
 npm update -g
-npm install -g pm2@5.1.0
+npm install -g pm2@5.1.1
 npm install -g npm@latest-6
 
 git config --global http.https://gopkg.in.followRedirects true
