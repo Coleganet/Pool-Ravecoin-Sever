@@ -18,7 +18,7 @@ Highly Efficient Stratum Server for Ravencoin!
 * Ubuntu Server 20.04.* LTS
 * Coin daemon
 * Node Version Manager
-* Node 12.22.2
+* Node 12.22.5
 * Process Manager 2 / pm2
 * Redis Server
 * ntp
