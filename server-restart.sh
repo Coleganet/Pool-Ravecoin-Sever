@@ -17,7 +17,7 @@ echo "Current working dir : $PWD"
 echo "Script location path (dir) : $BASEDIR"
 echo ""
 
-~/.nvm/versions/node/v12.22.2/bin/pm2 restart pool
+~/.nvm/versions/node/v12.22.5/bin/pm2 restart pool
 
 sudo renice -n -18 -p $(pidof node)
 sudo renice -n -18 -p $(pidof nodejs)
