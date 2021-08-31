@@ -16,7 +16,7 @@ sudo rm /etc/apt/sources.list.d/*
 sudo apt update
 sudo apt upgrade -y
 
-sudo apt install -y apt-transport-https software-properties-common build-essential autoconf pkg-config make gcc g++ screen wget curl ntp fail2ban 
+sudo apt install -y apt-transport-https software-properties-common build-essential autoconf pkg-config make gcc g++ screen wget curl ntp fail2ban
 
 sudo add-apt-repository -y ppa:chris-lea/redis-server
 curl -fsSL https://deb.nodesource.com/setup_12.x | sudo -E bash -
